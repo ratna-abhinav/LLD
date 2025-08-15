@@ -20,26 +20,31 @@ class Document {
 class OpenCommand implements Command {
   private final Document doc;
   public OpenCommand(Document doc) { this.doc = doc; }
-  @Override public void execute() { doc.open(); }
+
+  @Override 
+  public void execute() { doc.open(); }
 }
 
 class SaveCommand implements Command {
   private final Document doc;
   public SaveCommand(Document doc) { this.doc = doc; }
-  @Override public void execute() { doc.save(); }
+
+  @Override 
+  public void execute() { doc.save(); }
 }
 
 class CloseCommand implements Command {
   private final Document doc;
   public CloseCommand(Document doc) { this.doc = doc; }
-  @Override public void execute() { doc.close(); }
+
+  @Override 
+  public void execute() { doc.close(); }
 }
 
 class ShortcutManager {
   private final Map<String, Command> shortcuts = new HashMap<>();
 
   public void registerShortcut(String keyCombo, Command command) {
-    System.out.println("org: " + keyCombo + " normalized: " + normalize(keyCombo));
     shortcuts.put(normalize(keyCombo), command);
   }
 
@@ -60,6 +65,7 @@ class ShortcutManager {
 
   private String normalize(String combo) {
     if (combo == null) return "";
+    // remove all whitespaces and tabs from combo
     return combo.trim().toUpperCase().replaceAll("\\s+", "");
   }
 }
