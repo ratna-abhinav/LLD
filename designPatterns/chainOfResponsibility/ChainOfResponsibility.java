@@ -53,6 +53,7 @@ public class ChainOfResponsibility {
         FoodPreparationHandler foodPreparationHandler = new FoodPreparationHandler();
         DeliveryConfirmationHandler deliveryConfirmationHandler = new DeliveryConfirmationHandler();
 
+        // we are deciding the next step/handler/process at runtime
         orderValidationHandler.setNextHandler(paymentProcessHandler);
         paymentProcessHandler.setNextHandler(foodPreparationHandler);
         foodPreparationHandler.setNextHandler(deliveryConfirmationHandler);
