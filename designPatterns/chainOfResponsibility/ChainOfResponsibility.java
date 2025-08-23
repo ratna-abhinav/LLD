@@ -8,6 +8,12 @@ abstract class OrderHandler {
     void setNextHandler(OrderHandler nextHandler) {
         this.nextHandler = nextHandler;
     }
+
+    protected void handleNext(String order) {
+        if (nextHandler != null) {
+            nextHandler.processOrder(order);
+        }
+    }
 }
 
 class OrderValidationHandler extends OrderHandler {
@@ -15,7 +21,7 @@ class OrderValidationHandler extends OrderHandler {
     @Override
     public void processOrder(String order) {
         System.out.println(order + " order is placed :)");
-        nextHandler.processOrder(order);
+        super.handleNext(order);
     }
 
 }
@@ -25,7 +31,7 @@ class PaymentProcessHandler extends OrderHandler {
     @Override
     void processOrder(String order) {
         System.out.println("Payment is getting processed ....");
-        if (nextHandler != null) nextHandler.processOrder(order);
+        super.handleNext(order);
     }
 }
 
@@ -33,7 +39,7 @@ class FoodPreparationHandler extends OrderHandler {
     @Override
     void processOrder(String order) {
         System.out.println(order + " is getting prepared ....");
-        if (nextHandler != null) nextHandler.processOrder(order);
+        super.handleNext(order);
     }
 }
 
@@ -41,23 +47,23 @@ class DeliveryConfirmationHandler extends OrderHandler {
     @Override
     void processOrder(String order) {
         System.out.println(order + " is delivered :)");
-        if (nextHandler != null) nextHandler.processOrder(order);
+        super.handleNext(order);
     }
 }
 
 public class ChainOfResponsibility {
     public static void main(String[] args) {
 
-        OrderValidationHandler orderValidationHandler = new OrderValidationHandler();
-        PaymentProcessHandler paymentProcessHandler = new PaymentProcessHandler();
-        FoodPreparationHandler foodPreparationHandler = new FoodPreparationHandler();
-        DeliveryConfirmationHandler deliveryConfirmationHandler = new DeliveryConfirmationHandler();
+        OrderHandler orderValidationHandler = new OrderValidationHandler();
+        OrderHandler paymentProcessHandler = new PaymentProcessHandler();
+        OrderHandler foodPreparationHandler = new FoodPreparationHandler();
+        OrderHandler deliveryConfirmationHandler = new DeliveryConfirmationHandler();
 
         // we are deciding the next step/handler/process at runtime
         orderValidationHandler.setNextHandler(paymentProcessHandler);
         paymentProcessHandler.setNextHandler(foodPreparationHandler);
         foodPreparationHandler.setNextHandler(deliveryConfirmationHandler);
 
-        orderValidationHandler.processOrder("Pizza & Chicken");
+        orderValidationHandler.processOrder("Hot - Fresh Pizza");
     }
 }
