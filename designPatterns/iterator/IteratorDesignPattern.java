@@ -32,7 +32,11 @@ class MenuItem {
   }
 }
 
-class DinerHouse {
+interface Menu {
+  Iterator createIterator();
+}
+
+class DinerHouse implements Menu {
   private final List<MenuItem> menuItems;
 
   public DinerHouse() {
@@ -50,16 +54,13 @@ class DinerHouse {
     menuItems.add(menuItem);
   }
 
-  public java.util.List<MenuItem> getMenuItems() {
-    return menuItems;
-  }
-
+  @Override
   public Iterator createIterator() {
     return new DinerHouseIterator(menuItems);
   }
 }
 
-class PancakeHouse {
+class PancakeHouse implements Menu {
   private MenuItem[] menuItems;
   private int numberOfItems = 0;
   static final int MAX_ITEMS = 6;
@@ -82,10 +83,7 @@ class PancakeHouse {
     }
   }
 
-  public MenuItem[] getMenuItems() {
-    return menuItems;
-  }
-
+  @Override
   public Iterator createIterator() {
     return new PancakeHouseIterator(menuItems);
   }
@@ -135,10 +133,10 @@ class PancakeHouseIterator implements Iterator {
 }
 
 class Waitress {
-  private final DinerHouse dinerHouse;
-  private final PancakeHouse pancakeHouse;
+  private final Menu dinerHouse;
+  private final Menu pancakeHouse;
 
-  public Waitress(DinerHouse dinerHouse, PancakeHouse pancakeHouse) {
+  public Waitress(Menu dinerHouse, Menu pancakeHouse) {
     this.dinerHouse = dinerHouse;
     this.pancakeHouse = pancakeHouse;
   }
@@ -147,9 +145,9 @@ class Waitress {
     Iterator dinerIterator = dinerHouse.createIterator();
     Iterator pancakeIterator = pancakeHouse.createIterator();
 
-    System.out.println("MENU\n----\nBREAKFAST");
+    System.out.println("BREAKFAST Menu\n");
     printMenu(pancakeIterator);
-    System.out.println("\nLUNCH");
+    System.out.println("\nLUNCH Menu\n");
     printMenu(dinerIterator);
   }
 
