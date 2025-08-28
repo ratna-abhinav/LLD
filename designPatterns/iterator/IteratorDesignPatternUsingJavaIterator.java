@@ -1,5 +1,6 @@
 package designPatterns.iterator;
 
+import java.util.Iterator;
 import java.util.List;
 
 class MenuItem {
@@ -113,23 +114,19 @@ class PancakeHouseIterator implements java.util.Iterator<MenuItem> {
   }
 }
 
-class Waitress {
-  private final Menu dinerHouse;
-  private final Menu pancakeHouse;
+class BestWaitress {
+  private final List<Menu> menus;
 
-  public Waitress(Menu dinerHouse, Menu pancakeHouse) {
-    this.dinerHouse = dinerHouse;
-    this.pancakeHouse = pancakeHouse;
+  public BestWaitress(List<Menu> menus) {
+    this.menus = menus;
   }
 
   public void printMenu() {
-    java.util.Iterator<MenuItem> dinerIterator = dinerHouse.createIterator();
-    java.util.Iterator<MenuItem> pancakeIterator = pancakeHouse.createIterator();
-
-    System.out.println("BREAKFAST Menu\n");
-    printMenu(pancakeIterator);
-    System.out.println("\nLUNCH Menu\n");
-    printMenu(dinerIterator);
+    Iterator<Menu> menuIterator = menus.iterator();
+    while (menuIterator.hasNext()) {
+      Menu menu = menuIterator.next();
+      printMenu(menu.createIterator());
+    }
   }
 
   private void printMenu(java.util.Iterator<MenuItem> iterator) {
@@ -144,7 +141,10 @@ class Waitress {
 
 public class IteratorDesignPatternUsingJavaIterator {
   public static void main(String[] args) {
-    Waitress waitress = new Waitress(new DinerHouse(), new PancakeHouse());
+    List<Menu> menus = new java.util.ArrayList<>();
+    menus.add(new DinerHouse());
+    menus.add(new PancakeHouse());
+    BestWaitress waitress = new BestWaitress(menus);
     waitress.printMenu();
   }
 }
